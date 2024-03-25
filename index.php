@@ -1,6 +1,9 @@
 <?php
-include 'redirect.php';
+require_once(__DIR__ . '/core.php');
 
+$sqli = $link->query("SELECT * FROM `urls`");
+
+$data = mysqli_fetch_all($sqli, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +14,27 @@ include 'redirect.php';
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="get">
-        <input type="text" value="" name="url">
+    <form action="request.php" method="post">
+        <input type="text" name="url">
         <input type="submit" value="Отправить">
     </form>
-        <a href = '<?=$url?>'>https://pi.com/<?=$short_key?></a>
-    </body>
+
+    <?php if ($sqli->num_rows > 0): ?>
+      <div>
+        <?php foreach ($data as $row): ?>
+          <div id="short-url">
+            <p>
+              <a id="short-url-target" href="<?= getShortUrl($row['short_url']); ?>"><?= $row['target_url']; ?></a>
+            </p>
+
+            <button id="short-url-copy">
+              Скопировать
+            </button>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+
+    <script src="main.js"></script>
+  </body>
 </html>
