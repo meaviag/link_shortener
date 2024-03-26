@@ -3,7 +3,7 @@ require_once(__DIR__ . '/core.php');
 
 $sqli = $link->query("SELECT * FROM `urls`");
 
-$data = mysqli_fetch_all($sqli, MYSQLI_ASSOC);
+$data = mysqli_fetch_all($sqli, MYSQLI_ASSOC); //получает все строки из sqli и переобразует их в ассоциативный массив 
 ?>
 
 <!DOCTYPE html>
@@ -19,14 +19,13 @@ $data = mysqli_fetch_all($sqli, MYSQLI_ASSOC);
         <input type="submit" value="Отправить">
     </form>
 
-    <?php if ($sqli->num_rows > 0): ?>
+    <?php if ($sqli->num_rows > 0): ?> <!-- проверяет наличие записи в бд (из r/index.php)-->
       <div>
         <?php foreach ($data as $row): ?>
           <div id="short-url">
             <p>
-              <a id="short-url-target" href="<?= getShortUrl($row['short_url']); ?>"><?= $row['target_url']; ?></a>
+              <a id="short-url-target" href="<?= getShortUrl($row['short_url']); ?>"><?= $row['target_url']; ?></a>  <!-- в href="..." использует короткую ссылку (получается функцию из файла core.php). здесь в ['short_url'] данные беруться из БД, ['target_url'] выводит url ссылку. -->
             </p>
-
             <button id="short-url-copy">
               Скопировать
             </button>
